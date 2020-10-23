@@ -8,21 +8,25 @@ public class CartesianPlane {
     public void plotPoint(int x, int y) {
         if (findPoint(x,y) == null) {
             listOfPlottedPoints.add(new PlottedPoint(x,y));
+            // update each point's map(containing all similar points) when a new point is added
             updateXAndYPointMatches();
         }
     }
 
     private void updateXAndYPointMatches(){
+        // update maps of similar points on both maps
         storeMatchingXValues();
         storeMatchingYValues();
     }
     public void removeAllPlottedPoints() {
+        // start new array of points
         listOfPlottedPoints.clear();
         updateXAndYPointMatches();
     }
 
     public void removePlottedPoint(int x, int y) {
         listOfPlottedPoints.remove(findPoint(x,y));
+        // both maps need to be updated due to change in list of points
         updateXAndYPointMatches();
         printListOfPlottedPoints();
     }
@@ -48,8 +52,10 @@ public class CartesianPlane {
 
     private List<PlottedPoint> findPointsWithMatchingXValues(PlottedPoint plottedPoint) {
         List<PlottedPoint> listOfMatchingXPoints = new ArrayList<>();
+        // arraylist storing all points with matching x values
         for (PlottedPoint point: listOfPlottedPoints) {
             if (point.getX() == plottedPoint.getX() && point != plottedPoint) {
+                // cannot add itself to list of matching points
                 listOfMatchingXPoints.add(point);
             }
         } return listOfMatchingXPoints;
@@ -57,6 +63,7 @@ public class CartesianPlane {
 
     private Map<PlottedPoint,List<PlottedPoint>> storeMatchingXValues() {
         Map<PlottedPoint,List<PlottedPoint>> map = new HashMap<>();
+        // map storing matching x values for every point in the list
         for (PlottedPoint point: listOfPlottedPoints) {
             map.put(point,findPointsWithMatchingXValues(point));
         }
@@ -81,25 +88,31 @@ public class CartesianPlane {
     }
 
     public int findRectangles(){
-        int rectangle = 0;
+        int corners = 0;
         for (PlottedPoint initialPointInList: listOfPlottedPoints) {
             for (PlottedPoint comparedPointInList: listOfPlottedPoints){
+                // looping through every point in list and comparing it to every other point
                 if (validateRectangle(initialPointInList,comparedPointInList)){
-                    rectangle++;
+                    // returns true 4 times for every rectangle
+                    corners++;
                 }
             }
         }
-        return rectangle/4;
+        return corners/4;
     }
 
     private boolean validateRectangle(PlottedPoint plottedPoint, PlottedPoint comparedPoint) {
         return compareYPointsToXPoints(plottedPoint, comparedPoint) && compareYPointsToXPoints(comparedPoint, plottedPoint) && (plottedPoint != comparedPoint);
+        // if points are not equal and compareYPointsToXPoints returns true if points are switched the if is a rectangle
     }
 
     private boolean compareYPointsToXPoints(PlottedPoint plottedPoint,PlottedPoint comparePoint) {
-        for (PlottedPoint YPoint: storeMatchingYValues().get(plottedPoint)){
-            for (PlottedPoint XPoint: storeMatchingXValues().get(comparePoint)){
-                if (XPoint.equals(YPoint)){
+        for (PlottedPoint plottedPoint1: storeMatchingYValues().get(plottedPoint)){
+            // loops through all points with matching Y points in plottedPoint
+            for (PlottedPoint comparedPoint1: storeMatchingXValues().get(comparePoint)){
+                // loops through all points with matching X points in comparePoint
+                if (comparedPoint1.equals(plottedPoint1)){
+                    // if the points are equal the points are opposite sides of a rectangle
                     return true;
                 }
             }
