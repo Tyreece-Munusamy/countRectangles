@@ -1,7 +1,5 @@
 package com.company;
 
-import java.util.*;
-
 public class PlottedPoint {
     private final int x;
     private final int y;

@@ -90,11 +90,11 @@ public class Main {
         printListOfOptions();
     }
     private static void option4DisplayAllPlottedPoints() {
-        plane.printListOfPlottedPoints();
+        plane.checkToPrintPlottedPoints();
         printListOfOptions();
     }
     private static void option5NumberOfRectangles(){
-        plane.printListOfPlottedPoints();
+        plane.checkToPrintPlottedPoints();
         if (plane.findRectangles() > 1){
         System.out.println(plane.findRectangles() + " rectangles were found");
         } else {
