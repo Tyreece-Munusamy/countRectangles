@@ -61,6 +61,7 @@ public class CartesianPlane {
         System.out.println("Points on plane:");
         for (PlottedPoint point : listOfPlottedPoints) {
             System.out.println("(" + point.getX() + ";" + point.getY() + ")");
+            // github
         }
     }
 
